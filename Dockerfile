@@ -23,6 +23,8 @@ RUN set -x \
 VOLUME ["/var/atlassian/application-data/jira", "/opt/atlassian/jira/logs"]
 WORKDIR /opt/atlassian/jira
 
+ADD build/server.xml /opt/atlassian/jira/conf
+
 COPY "docker-entrypoint.sh" "/"
 ENTRYPOINT ["/docker-entrypoint.sh"]
 RUN chmod +x /docker-entrypoint.sh
