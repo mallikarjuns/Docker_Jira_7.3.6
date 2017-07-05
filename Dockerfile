@@ -62,7 +62,10 @@ RUN chmod +x /etc/my_init.d/99_mysql_setup.sh
 ADD my_init.d/Jiradb.sql /etc/Jiradb.sql
 RUN chmod +x /etc/Jiradb.sql
 
-CMD docker exec -it mysql -uroot -proot Jiradb < /etc/Jiradb.sql
+RUN mysql -uroot -proot -e "CREATE DATABASE mydb"
+RUN mysql -uroot -proot Jiradb < /etc/Jiradb.sql
+
+#CMD docker exec -it mysql -uroot -proot Jiradb < /etc/Jiradb.sql
 
 
 EXPOSE 3306
