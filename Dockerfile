@@ -1,5 +1,4 @@
 FROM openjdk:8
-MAINTAINER Swapnali Pingale <yeole.swapnali@gmail.com>
 
 ENV JIRA_HOME     /var/atlassian/application-data/jira
 ENV JIRA_INSTALL  /opt/atlassian/jira
@@ -62,8 +61,10 @@ RUN chmod +x /etc/my_init.d/99_mysql_setup.sh
 ADD my_init.d/Jiradb.sql /etc/Jiradb.sql
 RUN chmod +x /etc/Jiradb.sql
 
-RUN mysql -uroot -proot -e "CREATE DATABASE mydb"
-RUN mysql -uroot -proot Jiradb < /etc/Jiradb.sql
+RUN /bin/bash -c "/usr/bin/mysqld_safe &" && \
+  sleep 5 && \
+  mysql -uroot -proot -e "CREATE DATABASE Jiradb"
+  mysql -uroot -proot Jiradb < /etc/Jiradb.sql
 
 #CMD docker exec -it mysql -uroot -proot Jiradb < /etc/Jiradb.sql
 
