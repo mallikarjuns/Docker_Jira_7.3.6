@@ -63,7 +63,7 @@ RUN chmod +x /etc/Jiradb.sql
 
 RUN /bin/bash -c "/usr/bin/mysqld_safe &" && \
   sleep 5 && \
-  mysql -uroot -proot -e "CREATE DATABASE Jiradb"
+  mysql -uroot -proot -e "CREATE DATABASE Jiradb" && \
   mysql -uroot -proot Jiradb < /etc/Jiradb.sql
 
 #CMD docker exec -it mysql -uroot -proot Jiradb < /etc/Jiradb.sql
