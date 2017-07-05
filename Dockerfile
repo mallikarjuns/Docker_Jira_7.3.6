@@ -30,14 +30,22 @@ EXPOSE 8080
 
 #CMD ["/sbin/my_init"]
 
-ENV MYSQL_USER swapnalip
-ENV MYSQL_PASS test123
+
 
 RUN echo "mysql-server mysql-server/root_password password root" | debconf-set-selections
 RUN echo "mysql-server mysql-server/root_password_again password root" | debconf-set-selections
 
-RUN apt-get install -y mysql-server
+RUN apt-get purge mysql*
+RUN apt-get autoremove
+RUN apt-get autoclean
+RUN rm -rf /etc/mysql/ /var/lib/mysql
+RUN wget http://dev.mysql.com/get/mysql-apt-config_0.6.0-1_all.deb
+RUN dpkg -i mysql-apt-config_0.6.0-1_all.deb || true
 
+
+RUN apt-get update
+
+RUN apt-get install -y mysql-server
 #RUN rm -rf /var/lib/mysql/*
 
 ADD build/my.cnf /etc/mysql/my.cnf
@@ -53,6 +61,9 @@ ADD my_init.d/99_mysql_setup.sh /etc/my_init.d/99_mysql_setup.sh
 RUN chmod +x /etc/my_init.d/99_mysql_setup.sh
 ADD my_init.d/Jiradb.sql /etc/Jiradb.sql
 RUN chmod +x /etc/Jiradb.sql
+
+CMD docker exec -it Jiradb mysql -uroot -proot --force < /etc/Jiradb.sql
+
 
 EXPOSE 3306
 
