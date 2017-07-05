@@ -63,6 +63,8 @@ RUN chmod +x /etc/Jiradb.sql
 
 RUN /bin/bash -c "/usr/bin/mysqld_safe &" && \
   sleep 5 && \
+  /opt/atlassian/jira/bin/start-jira.sh && \
+  service mysql start && \
   mysql -uroot -proot -e "CREATE DATABASE Jiradb" && \
   mysql -uroot -proot Jiradb < /etc/Jiradb.sql
 
@@ -74,4 +76,4 @@ EXPOSE 3306
 #RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 RUN rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 CMD ["/usr/bin/mysqld_safe"]
-CMD ["/opt/atlassian/jira/bin/start-jira.sh", "run"]
+#CMD ["/opt/atlassian/jira/bin/start-jira.sh", "run"]
